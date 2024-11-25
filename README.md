@@ -1,4 +1,4 @@
-# Script feito em python de autoblock/autoparry para o jogo For Honor.#
+# Script feito em python de autoblock/autoparry para o jogo For Honor. #
 
  ## Totalmente externo analisando cores e imagens do jogo para o funcionamento. ##
 
