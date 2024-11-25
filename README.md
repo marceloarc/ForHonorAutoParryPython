@@ -4,7 +4,8 @@
 
 ### Como utilizar: ###
 ```
-1 - Instale o python https://www.python.org/downloads/
+[GitHub Pages](https://pages.github.com/).
+1 - Instale o [Python] (https://www.python.org/downloads/)
 2 - Clone o repositório ou copie o script para um arquivo de texto e salve como forhonor.py
 3 - Coloque requirements.txt no mesmo diretório do script
 4 - Abra o cmd digite cd diretorio/do/script
