@@ -12,6 +12,13 @@ import win32api
 import mss
 import asyncio
 from ctypes import wintypes
+
+# Definições de teclas
+AUTOBLOCK_KEY = "F1"
+AUTODODGE_KEY = "F2"
+AUTOPARRY_KEY = 0x43
+
+
 # Definições de cores e tolerâncias
 script_dir = os.path.dirname(os.path.abspath(__file__))
 S_HEIGHT, S_WIDTH = (PIL.ImageGrab.grab().size)
