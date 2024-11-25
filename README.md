@@ -20,4 +20,5 @@ A tecla f1 ativa o autoblock e para funcionar vc deve colocar as setas do teclad
 Funciona somente na resolução 1920x1080
 Funciona melhor a 120 fps +
 Não utilize nenhuma opção de daltonismo
+Coloque o fov em 81 e o contraste em 55
 ```
