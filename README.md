@@ -21,4 +21,5 @@ Funciona somente na resolução 1920x1080
 Funciona melhor a 120 fps +
 Não utilize nenhuma opção de daltonismo
 Coloque o fov em 81 e o contraste em 55
+Desative os efeitos graficos: Shadows, Motion Blur, Ambient Occlusion, Dynamic Reflections, Dynamic Shadow
 ```
