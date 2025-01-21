@@ -8,9 +8,9 @@
 * - Clone o repositório ou copie o script para um arquivo de texto e salve como forhonor.py
 * - Coloque requirements.txt no mesmo diretório do script
 * - Abra o cmd digite cd diretorio/do/script
-* - Digite o comando install requirements.txt
+* - Digite o comando install requirements.txt/ py -m pip install -r requirements.txt
 * - Abra o cmd digite cd diretorio/do/script
-* - Digite python forhonor.py
+* - Digite python forhonor.py / py forhonor.py
 
 
 A tecla f1 ativa o autoblock e para funcionar vc deve colocar as setas do teclado como botões de mudar o lado da defesa no jogo, para o autoparry basta segurar a tecla C
