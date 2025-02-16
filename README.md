@@ -22,6 +22,7 @@ A tecla f1 ativa o autoblock e para funcionar vc deve colocar as setas do teclad
 * Não utilize nenhuma opção de daltonismo
 * Coloque o fov em 81 e o contraste em 55
 * Desative os efeitos graficos: Shadows, Motion Blur, Ambient Occlusion, Dynamic Reflections, Dynamic Shadow
+* Nas opçoes de interface recomendo deixar a opção modo de jogo em "minima"
 ___________________________________________________________________________________________________________________
  # AutoBlock/AutoParry Script for For Honor (Python-based External Tool) #
  ## Overview: ##
@@ -49,6 +50,7 @@ ________________________________________________________________________________
 * Color Settings: Do not use any colorblind settings in the game.
 * Field of View (FOV): Set to 81.
 * Contrast: Set to 55.
+* In the interface options, I recommend leaving the game mode option in "minimal"
 * Graphics Settings: Disable the following features:
     * Shadows
     * Motion Blur
