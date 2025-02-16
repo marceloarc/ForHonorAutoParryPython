@@ -13,7 +13,7 @@
 * - Digite python forhonor.py / py forhonor.py
 
 
-A tecla f1 ativa o autoblock e para funcionar vc deve colocar as setas do teclado como botões de mudar o lado da defesa no jogo, para o autoparry basta segurar a tecla C
+A tecla f1 ativa o autoblock e para funcionar vc deve colocar as setas do teclado (usem as setas do teclado numérico) como botões de mudar o lado da defesa no jogo, para o autoparry basta segurar a tecla C
 
 ### Atenção: ###
 
@@ -40,7 +40,7 @@ ________________________________________________________________________________
 
  ### Key Bindings: ###
 * F1: Activates autoblock.
-* Make sure the arrow keys are set as the controls for defense direction in the game.
+* Make sure the arrow keys (numeric ones) are set as the controls for defense direction in the game.
 * C: Activates autoparry when held.
 
 ### Notes: ###
