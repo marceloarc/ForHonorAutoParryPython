@@ -25,7 +25,7 @@ S_HEIGHT, S_WIDTH = (PIL.ImageGrab.grab().size)
 PARRY_R, PARRY_G, PARRY_B = (139, 146, 253)
 PARRY2_R, PARRY2_G, PARRY2_B = (34, 41, 255)
 BLOCK_R, BLOCK_G, BLOCK_B = (37, 46, 245)
-DODGE_R, DODGE_G, DODGE_B = (246, 98, 8)
+DODGE_R, DODGE_G, DODGE_B = (8, 99, 250)
 BOX_R, BOX_G, BOX_B = (5,107, 255)
 BOX2_R, BOX2_G, BOX2_B = (65,131, 5)
 GB_R, GB_G, GB_B = (250,31, 26)
@@ -33,13 +33,14 @@ TOLERANCE_PARRY = 2
 TOLERANCE_BLOCK = 10
 TOLERANCE_BOX = 1
 TOLERANCE_BOX2 = 5
-TOLERANCE_DODGE = 1
+TOLERANCE_DODGE = 3
 TOLERANCE_GB = 2
 CGB_coord_x = 0
 CGB_coord_y = 0
 search_width = 0
 search_height = 0
 block_coord_x = 0
+target_color_dodge = np.array([DODGE_R, DODGE_G, DODGE_B])
 target_color3 = np.array([BOX_R, BOX_G, BOX_B])
 block_coord_y = 0
 total_width2, total_height2 = 1920, 1080
@@ -73,6 +74,8 @@ window = gw.getWindowsWithTitle('For Honor®')[0]
 target_color = np.array([BLOCK_R, BLOCK_G, BLOCK_B])
 lower_bound = target_color - TOLERANCE_BLOCK
 upper_bound = target_color + TOLERANCE_BLOCK
+lower_bound_dodge = target_color_dodge - TOLERANCE_DODGE
+upper_bound_dodge = target_color_dodge + TOLERANCE_DODGE
 # Definições de entrada do teclado
 user32 = ctypes.WinDLL('user32', use_last_error=True)
 INPUT_KEYBOARD = 1
@@ -148,19 +151,22 @@ def ReleaseKey(hexKeyCode):
     user32.SendInput(1, ctypes.byref(x), ctypes.sizeof(x))
 
 async def BlockUp():
-     PressKey(0x26)
-     time.sleep(0.01)
-     ReleaseKey(0x26)
+
+    PressKey(0x26)
+    time.sleep(0.01)
+    ReleaseKey(0x26)
 
 async def BlockLeft():
-      PressKey(0x25)
-      time.sleep(0.01)
-      ReleaseKey(0x25)
+
+    PressKey(0x25)
+    time.sleep(0.01)
+    ReleaseKey(0x25)
 
 async def BlockRight():
-      PressKey(0x27)
-      time.sleep(0.01)
-      ReleaseKey(0x27)
+
+    PressKey(0x27)
+    time.sleep(0.01)
+    ReleaseKey(0x27)
 
 def leftClick():
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
@@ -321,86 +327,79 @@ class triggerBot():
 
     async def Dodge(self):
         if self.toggledDodge:
-            y, x = block_coord_y,block_coord_x
-            global box_pmap
-            # Exibir a imagem usando matplotlib
-            # self.draw_rectangle(left + x- search_area_size, top + y- search_area_size, 400, 700)
-            # Definir nova área de busca ao redor do pixel encontrado     
-            new_img_np = np.array(box_pmap)
-            # Realizar nova busca na nova área
-            new_r, new_g, new_b = new_img_np[:, :, 0], new_img_np[:, :, 1], new_img_np[:, :, 2]
-            dodge_mask = ((DODGE_R - TOLERANCE_DODGE < new_r) & (new_r < DODGE_R + TOLERANCE_DODGE) &
-                (DODGE_G - TOLERANCE_DODGE < new_g) & (new_g < DODGE_G + TOLERANCE_DODGE) &
-                (DODGE_B - TOLERANCE_DODGE < new_b) & (new_b < DODGE_B + TOLERANCE_DODGE))
-            dodge_coords = np.argwhere(dodge_mask)
-            if(dodge_coords.size  > 0):
+            if(box_pmap != 1):
+                new_img_np = np.array(box_pmap)
+                new_mask = np.all((new_img_np[..., :3] >= lower_bound_dodge) & (new_img_np[..., :3] <= upper_bound_dodge), axis=-1)
+                if np.any(new_mask):
                     if keyboard.is_pressed('w'):
+                        keyboard.block_key('w')  # Bloqueia a tecla "W"
+                        keyboard.release('w')
                         time.sleep(0.01)
                         PressKey(0x53)
-                        time.sleep(0.01)
-                        ReleaseKey(0x53) 
                         time.sleep(0.01) 
-                        PressKey(0x35)
+                        PressKey(0x20)
                         time.sleep(0.01)
-                        ReleaseKey(0x35)
-                
+                        ReleaseKey(0x20)
+                        ReleaseKey(0x53)
+                        time.sleep(0.5)
+                        keyboard.unblock_key('w')
                     else:
                         await asyncio.sleep(0.05)
-                        PressKey(0x35)
+                        PressKey(0x20)
                         time.sleep(0.01)
-                        ReleaseKey(0x35)
-            
+                        ReleaseKey(0x20)
+        
     async def AutoBlock(self):
-        global box_pmap
-        global center_block_x
-        global center_block_y
-    
-        if(box_pmap != 1):
-            new_img_np = np.array(box_pmap)
-            # Aplica a máscara de uma vez usando broadcasting
-            new_mask = np.all((new_img_np[..., :3] >= lower_bound) & (new_img_np[..., :3] <= upper_bound), axis=-1)
-            rows, cols = np.nonzero(new_mask)
-            
-            if rows.size > 0:        
+        if self.toggledAutoblock:
+            global box_pmap
+            global center_block_x
+            global center_block_y
+        
+            if(box_pmap != 1):
+                new_img_np = np.array(box_pmap)
+                # Aplica a máscara de uma vez usando broadcasting
+                new_mask = np.all((new_img_np[..., :3] >= lower_bound) & (new_img_np[..., :3] <= upper_bound), axis=-1)
+                rows, cols = np.nonzero(new_mask)
                 
-                distance_to_top = rows[0]
-                distance_to_left = cols[0]
-                distance_to_right = search_width - cols[0]
-                
-                distances = {
-                    "top": distance_to_top,
-                    "left": distance_to_left,
-                    "right": distance_to_right
-                }
-
-                closest_side = min(distances, key=distances.get)
-                # current_time = time.time()
-                # if current_time - self.last_move_time >= self.move_interval:
-                #     # Atualizar o tempo da última ação
-                #     self.last_move_time = current_time
+                if rows.size > 0:        
                     
-                #     move_funcs = {"top": BlockUp, "left": BlockLeft, "right": BlockRight}
-                #     await move_funcs[closest_side]()
+                    distance_to_top = rows[0]
+                    distance_to_left = cols[0]
+                    distance_to_right = search_width - cols[0]
+                    
+                    distances = {
+                        "top": distance_to_top,
+                        "left": distance_to_left,
+                        "right": distance_to_right
+                    }
+
+                    closest_side = min(distances, key=distances.get)
+                    # current_time = time.time()
+                    # if current_time - self.last_move_time >= self.move_interval:
+                    #     # Atualizar o tempo da última ação
+                    #     self.last_move_time = current_time
+                        
+                    #     move_funcs = {"top": BlockUp, "left": BlockLeft, "right": BlockRight}
+                    #     await move_funcs[closest_side]()
+                    
+                    move_funcs = {"top": BlockUp, "left": BlockLeft, "right": BlockRight}
+                    await move_funcs[closest_side]()
+
+
                 
-                move_funcs = {"top": BlockUp, "left": BlockLeft, "right": BlockRight}
-                await move_funcs[closest_side]()
-
-
-            
 
 
     async def monitor(self):
         while True:
-            if self.toggledAutoblock:
-                if window.isActive:   
-                    await self.call_tests()
+            if window.isActive:   
+                await self.call_tests()
 
     async def call_tests(self):
         tasks = [
             asyncio.create_task(self.Box()),
-            asyncio.create_task(self.Dodge()),
             asyncio.create_task(self.AutoBlock()),
             asyncio.create_task(self.Parry()),
+            asyncio.create_task(self.Dodge()),
         ]
         await asyncio.gather(*tasks)
 
